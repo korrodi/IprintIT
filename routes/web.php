@@ -14,15 +14,18 @@
 Route::get('/', function () {
     return view('pages.welcome');
 });
+Route::get('/register/verify/{user_id}', 'UserController@confirmRegistration')->name('user.confirm');
 
-Route::get('users','UsersController@listUsers');
-Route::get('users/create','UsersController@create')->name('users.create');
-Route::post('users/create','UsersController@store')->name('users.store');
-Route::get('users/edit/{user_id}', 'UsersController@editUser')->name('users.edit');
-Route::post('users/delete/{user_id}', 'UsersController@deleteUser')->name('users.delete');
+Route::get('users','UserController@listUsers')->name('users.index');
+Route::get('users/edit/{user_id}', 'UserController@editUser')->name('users.edit');
+
+
+
+Route::get('users/create','UserController@createUser')->name('users.create');
+Route::post('users/create','UserController@store')->name('users.store');
+Route::get('users/edit/{user_id}', 'UserController@editUser')->name('users.edit');
 Route::patch('users/edit/{user_id}', 'UserController@updateUser')->name('users.update');
-Route::get('departments','DepartmentsController@listDepartments');
-Route::post('departments','DepartmentsController@listDepartments');
+
 
 Auth::routes();
 /* Problem logout Fixed */

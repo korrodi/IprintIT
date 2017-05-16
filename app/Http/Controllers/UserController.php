@@ -7,8 +7,10 @@ use App\User;
 use App\Department;
 use App\Comment;
 use Storage;
+use Auth;
+use Mail;
 
-class UsersController extends Controller
+class UserController extends Controller
 {
     public function __construct()
     {
@@ -23,28 +25,22 @@ class UsersController extends Controller
         return view('users.index', compact('title', 'users'));
     }
 
-
-
-    
-    public function listFilterUsers(Request $request)
-    {
-        $title = 'List filtered users';
-        $users = User::paginate(15);
-        if ($request->get('post')) {
-            $datatables->having('count', $request->get('operator'), $request->get('post')); // having count search
-        }
-        return view('users.index', compact('title', 'users'));
-    }
-
     public function createUser()
     {
         $title = 'Add user';
         $user = new User();
 
-        return view('users.add', compact('title', 'user'));        
+        return view('users.add', compact('title', 'user'));
     }
 
-    public function addUser(Request $request)
+    public function editUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $title = 'Edit user';
+                
+        return view('users.edit', compact('title', 'user'));
+    }
+    /*public function addUser(Request $request)
     {
         $title = 'Add user';
         $user = new User();
@@ -58,27 +54,19 @@ class UsersController extends Controller
                 'department_id' => 'required|exists:departments,id',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return redirect()->route('users.create')->withErrors($validator)->withInput();
         }
 
         $user->password = password_hash($user->password, PASSWORD_DEFAULT);
 
         $message = ['message_success' => 'User created successfully'];
-        if(!$user->save()){
+        if (!$user->save()) {
             $message = ['message_error' => 'failed to create user'];
         }
 
 
-        return redirect()->route('profile.products')->with($message);   
-    }
-
-    public function editUser(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-        $title = 'Edit user';
-                
-        return view('users.edit', compact('title', 'user'));
+        return redirect()->route('profile.products')->with($message);
     }
 
     public function updateUser(Request $request, $id)
@@ -95,8 +83,7 @@ class UsersController extends Controller
             'profile_url' => 'url',
             //Problemas em validar textarea 'presentation' => 'required | ...',
         ]);
-        if($validator->fails()){
-
+        if ($validator->fails()) {
             return redirect()->route('users.edit', [$id])->withErrors($validator)->withInput();
         }
         if ($request->hasFile('profile_photo') && !$validator->fails()) {
@@ -111,26 +98,36 @@ class UsersController extends Controller
         }
         
         $message = ['message_success' => 'User updated successfully'];
-        if(!$user->save()){
+        if (!$user->save()) {
             $message = ['message_error' => 'failed to updated user'];
         }
 
 
         return redirect()->route('profile.products')->with($message);
-    }
-
-    public function deleteUser($id)
+    }*/
+    public function sendRegistration($id)
     {
         $user = User::findOrFail($id);
-        $advertisements = $user->advertisements()->get();
-        $message = ['message_success' => 'User deleted successfully'];
-        
-        if(!$user->delete() && !$advertisements->delete()){
 
-            $message = ['message_error' => 'failed to deleted user'];
+        Mail::send('auth.emails.verification', ['user' => $user], function($message) use ($user)
+        {
+            $message->from('iprintit.ainet@gmail.com', "IPrintIT::Team");
+            $message->subject("IPrintIT - Confirme a sua conta");
+            $message->to($user->email);
+        });
+    }
+    public function confirmRegistration($id)
+    {
+        $user = User::findOrFail($id);
+        if (!$user->activated != 1) {
+            $user->activated = 1;
+            $user->save();
+            Auth::login($user);
+        } else {
+            $message = ['message_error' => 'User already active'];
         }
 
-
-        return redirect()->route('users.index')->with($message);
+        return redirect('/users')->with($message);
+        ;
     }
 }
