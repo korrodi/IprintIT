@@ -37,9 +37,15 @@ class UsersTableSeeder extends Seeder
         $this->command->info('Creating '.$this->numberOfActivedUsers.' active users...');
         $bar = $this->command->getOutput()->createProgressBar($this->numberOfActivedUsers);
         for ($i = 0; $i < $this->numberOfActivedUsers; ++$i) {
-            DB::table('users')->insert($this->fakeUser($faker, $faker->randomElement($departments)));
+            $user = $this->fakeUser($faker, $faker->randomElement($departments));
+            if ($i == 0) {
+                $user['email'] = 'user@mail.pt';
+                $user['password']  = bcrypt('user123');
+            }
+            DB::table('users')->insert($user);
             $bar->advance();
         }
+
         $bar->finish();
         $this->command->info('');
 
@@ -48,6 +54,10 @@ class UsersTableSeeder extends Seeder
         for ($i = 0; $i < $this->numberOfActivatedAdmins; ++$i) {
             $user = $this->fakeUser($faker, $faker->randomElement($departments));
             $user['admin'] = true;
+            if ($i == 0) {
+                $user['email'] = 'admin@mail.pt';
+                $user['password'] = bcrypt('admin123');
+            }
             DB::table('users')->insert($user);
             $bar->advance();
         }

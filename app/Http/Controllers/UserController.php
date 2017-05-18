@@ -14,7 +14,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('auth', ['except' => ['listUsers']]);
+        $this->middleware('auth', ['except' => ['listUsers','showUser']]);
     }
 
     public function listUsers()
@@ -23,6 +23,13 @@ class UserController extends Controller
         $users = User::orderBy('updated_at', 'desc')->paginate(15);
 
         return view('users.index', compact('title', 'users'));
+    }
+    public function showUser($id)
+    {
+        $title = 'Show user';
+        $user = User::findOrFail($id);
+                
+        return view('users.show', compact('title', 'user'));
     }
 
     public function createUser()

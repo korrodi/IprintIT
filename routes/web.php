@@ -11,15 +11,24 @@
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('pages.welcome');
-});
+});*/
+Route::get('/','RepresentController@listUsers')->name('users.index');
+
+Route::get('/','RepresentController@listDepartments')->name('departments.index');
+
+
+Route::get('users/show/{user_id}', 'UserController@showUser')->name('users.show');
+
+
+
 Route::get('/register/verify/{user_id}', 'UserController@confirmRegistration')->name('user.confirm');
 
-Route::get('users','UserController@listUsers')->name('users.index');
 Route::get('users/edit/{user_id}', 'UserController@editUser')->name('users.edit');
 
 
+Route::get('/handle-index','UserController@handleIndex');
 
 Route::get('users/create','UserController@createUser')->name('users.create');
 Route::post('users/create','UserController@store')->name('users.store');
@@ -28,7 +37,6 @@ Route::patch('users/edit/{user_id}', 'UserController@updateUser')->name('users.u
 
 
 Auth::routes();
-/* Problem logout Fixed */
-Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
 
 Route::get('/home', 'HomeController@index')->name('home');
