@@ -16,7 +16,8 @@
 });*/
 Route::get('/','RepresentController@listUsers')->name('users.index');
 
-Route::get('/','RepresentController@listDepartments')->name('departments.index');
+//Route::get('/','RepresentController@listDepartments')->name('departments.index');
+Route::get('/departments','DepartmentController@listDepartments')->name('departments.index');
 
 
 Route::get('users/show/{user_id}', 'UserController@showUser')->name('users.show');

@@ -78,7 +78,8 @@
                             </div>
                     </td>
                 </tr>
-            @endforeach                                    
+            @endforeach 
+                                             
             </tbody>
         </table>
     </div>
@@ -88,7 +89,7 @@
 </section>
 
 <div class="panel-heading">
-    {{-- $departments->links() --}}
+   {{ $departments->links() }}  
 </div>
 @else
     <h2>No departments found</h2>

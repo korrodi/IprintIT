@@ -32,7 +32,7 @@
                 @endif
             </div>
         </div>
-        <div class="form-group{{ $errors->has('department_id') ? ' has-error' : '' }}">
+               <div class="form-group{{ $errors->has('department_id') ? ' has-error' : '' }}">
             <label for="department" class="col-md-4 control-label">Department</label>
             <div class="col-md-6">
                 <select name="department_id"  name="size" class="form-control">
