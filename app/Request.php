@@ -34,4 +34,12 @@ class Request extends Model
     {
         return $this->hasMany('App\Comment');
     }
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    /*protected $fillable = [
+        'name', 'email', 'password', 'department_id', 'activated'
+    ];*/
 }
