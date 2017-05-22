@@ -15,7 +15,7 @@ class RequestsController extends Controller
         return view('requests.index', compact('requests'));
     }
 
-    public function statistic(){
+    public function statisticData(){
         $totalImpressoes= DB::select('select sum(quantity) from requests where status = 1');
 
         $cores= DB::select('select sum(quantity) from requests where colored=? and status= ?',[1], [1]);
