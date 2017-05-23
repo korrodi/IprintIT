@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Auth;
 
 class CheckIfActive
 {
@@ -15,6 +16,13 @@ class CheckIfActive
      */
     public function handle($request, Closure $next)
     {
+        /*if(Auth::user() != null) {
+            if (Auth::user()->activated == 1) {
+                return $next($request);
+            }
+        }
+        return redirect('/');*/
         return $next($request);
+
     }
 }

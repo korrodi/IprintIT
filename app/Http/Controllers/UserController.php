@@ -126,7 +126,7 @@ class UserController extends Controller
     public function confirmRegistration($id)
     {
         $user = User::findOrFail($id);
-        if (!$user->activated != 1) {
+        if ($user->activated === 1) {
             $user->activated = 1;
             $user->save();
             Auth::login($user);
@@ -134,7 +134,7 @@ class UserController extends Controller
             $message = ['message_error' => 'User already active'];
         }
 
-        return redirect('/users')->with($message);
+        return redirect('/manage')->with($message);
         ;
     }
 }

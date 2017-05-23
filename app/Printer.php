@@ -9,8 +9,8 @@ class Printer extends Model
     /**
      * Get the requests for the Printer.
      */
-    public function requests()
+    public function printRequest()
     {
-        return $this->hasMany('App\Request');
+        return $this->hasMany('App\PrintRequest');
     }
 }

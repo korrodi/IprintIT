@@ -2,7 +2,6 @@
 <html lang="{{ config('app.locale') }}">
     <head>
         @include('includes.head')   
-        {{-- @include('includes.js') --}}
     </head>
 
     <body>
@@ -16,9 +15,14 @@
 
                 <!-- main content -->
                 <div id="content">
+                    @yield('landing')
                     <div class="container">
                             <div class="panel panel-default">
-                                @yield('content')
+                                @yield('usersContent')
+                            </div>
+                            <div class="panel panel-default">
+                                @yield('departmentsContent')
+
                             </div>
                     </div>
                 </div>
@@ -29,6 +33,7 @@
                     @include('includes.footer')
             </div>
         </footer>
-        @yield('js')
+                @include('includes.js')
+
     </body>
 </html>

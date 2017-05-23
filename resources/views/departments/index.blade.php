@@ -1,7 +1,7 @@
 @extends('layout.master')
 
-@section('content')
-<div class="panel-heading">{{ $title }}</div>
+@section('departmentsContent')
+<div class="panel-heading">{{ isset($title) ? $title : 'included departments' }}</div>
 <div class="panel-body">
     <div class="pull-right">
         <div class="btn-group">
@@ -84,9 +84,6 @@
         </table>
     </div>
 </div>
-</div>
-</div>
-</section>
 
 <div class="panel-heading">
    {{ $departments->links() }}  

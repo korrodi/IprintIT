@@ -1,7 +1,7 @@
 @extends('layout.master')
 
-@section('content')
-<div class="panel-heading">{{ $title }}</div>
+@section('usersContent')
+<div class="panel-heading">{{ isset($title) ? $title : 'included users' }}</div>
 <div class="panel-body">
     <div class="pull-right">
         <div class="btn-group">
@@ -105,9 +105,7 @@
         </table>
     </div>
 </div>
-</div>
-</div>
-</section>
+
 
 <div class="panel-heading">
     {{ $users->links() }}

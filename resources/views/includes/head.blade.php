@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<title>@yield('title')</title>
+<title>{{ $pageTitle }}</title>
 
 <meta name="description" content="">
 <meta name="author" content="2141216, ...">

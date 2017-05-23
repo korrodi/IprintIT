@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Request extends Model
+class PrintRequest extends Model
 {
     /**
      * Get the User that sended the Request.
@@ -34,6 +34,7 @@ class Request extends Model
     {
         return $this->hasMany('App\Comment');
     }
+    protected $table = 'requests';
     /**
      * The attributes that are mass assignable.
      *
