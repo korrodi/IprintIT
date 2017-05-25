@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Auth;
 
-class CheckIfBlock
+class CheckIfBlocked
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,15 @@ class CheckIfBlock
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        $user = $request->user();
+        if (isset($user)) {
+            if ($user->isBlocked()) {
+                return $next($request);
+            }
+
+        Auth::logout();
+        }
+        return redirect('/');
     }
 
     public function terminate($request, $response)

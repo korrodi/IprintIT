@@ -1,7 +1,5 @@
-@extends('layout.master')
-
-@section('usersContent')
-<div class="panel-heading">{{ isset($title) ? $title : 'included users' }}</div>
+<div class="panel-heading">{{ isset($title) ? $title : 'included departments' }}</div>
+<a id="departments"></a>
 <div class="panel-body">
     <div class="pull-right">
         <div class="btn-group">
@@ -46,7 +44,7 @@
             </div>
     </form>
     </div>
-    @if(count($users))
+    @if(count($departments))
     @if (session('status'))
         <div class="alert alert-success">
             {{ session('status') }}
@@ -55,8 +53,8 @@
     <div class="table-container">
         <table class="table table-filter">
             <tbody>
-            @foreach ($users as $user)
-                <tr onclick="document.location = '{{route('users.show',[$user->id])}}';">
+            @foreach ($departments as $department)
+                <tr onclick="document.location = '{{-- route('departments.show',[$department->id]) --}}';">
                     <td>
                         <div class="ckbox">
                             <input type="checkbox" id="checkbox1">
@@ -70,47 +68,24 @@
                     </td>
                     <td>
                         <div class="media">
-                            <div class="image_profile">
-                                <a href="#" class="pull-left">
-
-                                @if(isset($user->profile_photo))
-                                    <img src="/profiles/{{ $user->profile_photo }}"  width="55" height="55" alt="" class="img-circle"/>
-
-                                @else
-                                    <img src="http://placehold.it/55x55/000/fff" width="55" height="55" alt="" class="img-circle"/>
-                                @endif
-                                </a>
-                            </div>
                             <div class="media-body">
                                 <span class="media-meta pull-right">Febrero 13, 2016</span>
                                 <h4 class="title">
-                                    {{ $user->name }}, <span class="pull-right">{{ $user->department->name }}</span>
-                                    <span class="pull-right pagado">{{ $user->activated == 1 ? 'activo' : 'desativo' }}</span>
+                                    <span class="pull-right">{{ $department->name }}</span>
                                 </h4>
-                                <p class="summary">{{ $user->email }}</p>
-                                <span class="pull-right">{{ $user->activated == 1 ? 'activo' : 'desativo' }}</span>
-                                <p class="summary">{{ $user->department->name }}</p>
                             </div>
                     </td>
-                    @if(Auth::user())
-                        @if(Auth::user()->id == $user->id)
-                        <td>
-                            <a class="btn btn-xs btn-primary" href="{{route('users.edit',[$user->id])}}">Edit</a>
-                        </td>
-                        @endif
-                    @endif
                 </tr>
-            @endforeach                                    
+            @endforeach 
+                                             
             </tbody>
         </table>
     </div>
 </div>
 
-
 <div class="panel-heading">
-    {{ $users->links() }}
+   {{ $departments->links() }}  
 </div>
 @else
-    <h2>No users found</h2>
+    <h2>No departments found</h2>
 @endif
-@endsection

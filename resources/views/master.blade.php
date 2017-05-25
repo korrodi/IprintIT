@@ -10,21 +10,15 @@
                 @include('includes.header')
             </header>
             <div id="main" class="pagerow">
-                {{--  sidebar content --}}
-                {{-- <div id="sidebar" class="col-md-4">@include('includes.sidebar')</div> --}}
-
                 <!-- main content -->
                 <div id="content">
                     @yield('landing')
-                    <div class="container">
+                    {{-- <div class="container">
                             <div class="panel panel-default">
-                                @yield('usersContent')
-                            </div>
-                            <div class="panel panel-default">
-                                @yield('departmentsContent')
-
+                                @yield('content')
                             </div>
                     </div>
+                    --}}
                 </div>
             </div>
         </div>

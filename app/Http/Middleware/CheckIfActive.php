@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
+use App\User;
 
 class CheckIfActive
 {
@@ -16,13 +17,19 @@ class CheckIfActive
      */
     public function handle($request, Closure $next)
     {
-        /*if(Auth::user() != null) {
-            if (Auth::user()->activated == 1) {
+        $user = $request->user();
+        if (isset($user)) {
+            if ($user->isActive()) {
                 return $next($request);
             }
-        }
-        return redirect('/');*/
-        return $next($request);
 
+        Auth::logout();
+        }
+        return redirect('/');
+    }
+    
+    public function terminate($request, $response)
+    {
+        // Store the session data...
     }
 }

@@ -1,6 +1,6 @@
-@extends('layout.master')
+@extends('master')
 
-@section('content')
+@section('usersContent')
     <div class="col-lg-16 col-sm-16">
         <div class="card hovercard">
             <div class="card-background">
@@ -35,10 +35,13 @@
                 </a>
             </div>
             <div class="btn-group" role="group">
-                <a type="button" id="settings" class="btn btn-default" href="{{ route('users.edit', [$user->id] ) }}">
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                    <div class="hidden-xs">Definições</div>
-                </a>
+                @if(Auth::user()->admin || Auth::user())
+
+                    <a type="button" id="settings" class="btn btn-default" href="{{ route('users.edit', [$user->id] ) }}">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        <div class="hidden-xs">Definições</div>
+                    </a>
+                @endif
             </div>
         </div>
         <div class="card-info">

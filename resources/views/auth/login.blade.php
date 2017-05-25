@@ -1,4 +1,4 @@
-@extends('layout.master')
+@extends('master')
 
 @section('content')
 <div class="panel-heading">Login</div>

@@ -55,10 +55,7 @@ return [
     |
     */
 
-    'from' => [
-        'adress' => env('MAIL_USERNAME'),
-        'name' => null,
-    ],
+    'from' => ['adress' => 'iprintit.ainet@gmail.com', 'name' => 'IPrintIT'],
 
     /*
     |--------------------------------------------------------------------------

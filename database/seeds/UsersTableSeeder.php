@@ -41,6 +41,8 @@ class UsersTableSeeder extends Seeder
             if ($i == 0) {
                 $user['email'] = 'user@mail.pt';
                 $user['password']  = bcrypt('user123');
+
+                $this->command->info('Created Auth User with Email: ' . $user['email']);
             }
             DB::table('users')->insert($user);
             $bar->advance();
@@ -57,6 +59,7 @@ class UsersTableSeeder extends Seeder
             if ($i == 0) {
                 $user['email'] = 'admin@mail.pt';
                 $user['password'] = bcrypt('admin123');
+                $this->command->info('Created Admin User with Email: ' . $user['email']);
             }
             DB::table('users')->insert($user);
             $bar->advance();
