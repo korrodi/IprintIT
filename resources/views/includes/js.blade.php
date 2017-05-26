@@ -20,6 +20,7 @@ $('.count').each(function () {
 });
 </script>
 
+<!-- Anchor links
 <script type="text/javascript">
 $('a[href^=#]').on("click",function(){
     var t= $(this.hash);
@@ -31,3 +32,4 @@ $('a[href^=#]').on("click",function(){
     }
 });
 </script>
+*/

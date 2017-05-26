@@ -12,13 +12,11 @@
             <div id="main" class="pagerow">
                 <!-- main content -->
                 <div id="content">
-                    @yield('landing')
-                    {{-- <div class="container">
-                            <div class="panel panel-default">
-                                @yield('content')
-                            </div>
+                    <div class="container">
+                        <div class="panel panel-default">
+                            @yield('content')
+                        </div>
                     </div>
-                    --}}
                 </div>
             </div>
         </div>
@@ -28,6 +26,5 @@
             </div>
         </footer>
                 @include('includes.js')
-
     </body>
 </html>

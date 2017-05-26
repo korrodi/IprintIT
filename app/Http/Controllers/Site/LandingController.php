@@ -14,11 +14,6 @@ class LandingController extends Controller
     {
         $title = 'Landing Page';
 
-        /* A lista de contactos deve ser paginada,
-        filtrada por nome e departamento e ordenável.  */
-        $users = User::orderBy('updated_at', 'desc')->paginate(5);
-        $departments = Department::paginate(5);
-
         $matchColor = ['colored' => '1', 'status' => '1'];
         $matchPb = ['colored' => '0', 'status' => '1'];
 
@@ -54,6 +49,6 @@ class LandingController extends Controller
             //'numeroImpressoesMensais' => $numeroImpressoesMensais
         ];
 
-        return view('pages.landing', compact('title', 'statisticData', 'users', 'departments'));
+        return view('pages.landing', compact('title', 'statisticData'));
     }
 }

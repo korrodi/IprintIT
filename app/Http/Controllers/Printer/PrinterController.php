@@ -3,12 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Printer;
 
-class PrintersController extends Controller
+class PrinterController extends Controller
 {
-    public function index()
+    public function listPrinters()
     {
-        $printers = Printer::all();
-        return view('printers.index', compact('printers'));
+        $title = 'List Printers';
+
+        $printers = Printer::paginate(15); 
+        //dd($printers);
+        return view('models.printers.index', compact('title', 'printers'));
+
+    }
+    public function showPrinter($id)
+    {
+        $printer = Printer::findOrFail($id);
+        $title = 'Show Printer';
+                
+        return view('models.printers.show', compact('title', 'printer'));
     }
 }

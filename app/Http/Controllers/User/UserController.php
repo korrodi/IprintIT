@@ -12,10 +12,18 @@ class UserController extends Controller
 {   
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['showUser']]);
-        $this->middleware('active', ['except' => ['showUser']]);
+        $this->middleware('auth', ['except' => ['listUsers','showUser']]);
+        //$this->middleware('active', ['except' => ['showUser']]);
     }
-    
+    public function listUsers()
+    {
+        $title = 'List Users';
+
+        $users = User::paginate(15); 
+
+        return view('models.users.index', compact('title', 'users'));
+
+    }
     public function showUser($id)
     {
         $user = User::findOrFail($id);
@@ -29,7 +37,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $title = 'Edit user';
                 
-        return view('users.edit', compact('title', 'user'));
+        return view('models.users.edit', compact('title', 'user'));
     }
     
     public function updateUser(Request $request, $id)
@@ -42,16 +50,12 @@ class UserController extends Controller
         $validator = validator($request->all());
 
         if ($validator->fails()) {
-            return redirect()->route('users.edit', [$id])->withErrors($validator)->withInput();
+            return redirect()->route('models.users.edit', [$id])->withErrors($validator)->withInput();
         }
         if ($request->hasFile('profile_photo') && !$validator->fails()) {
             $image = $request->file('profile_photo');
-
-            $filename  = Auth::user()->id . '-profile_photo.' . $image->getClientOriginalExtension();
-            File::makeDirectory(storage_path('uploads/img' . Auth::user()->id), $mode = 0777, true, true);
-
-            $path = public_path('uploads/img' . Auth::user()->id . '/' . $filename);
-            Image::make($image->getRealPath())->resize(150, 150)->save($path);
+            $filename = $image->getClientOriginalName();
+            $image = $request->file('profile_photo')->store('profiles');
             $user->profile_photo = $filename;
         }
         
@@ -61,7 +65,7 @@ class UserController extends Controller
         }
 
 
-        return redirect()->route('profile.products')->with($message);
+        return redirect()->route('user.show', [$id])->with($message);
     }
 
     protected function validator(array $data)
@@ -94,8 +98,13 @@ class UserController extends Controller
         });
     }
 
-    public function confirmRegistration($id)
+    public function confirmRegistration($remember_token)
     {
+        $users = User::all();
+        
+        foreach ($users as $user) {
+               if($user->remember_token == $remember_token);
+        }   
         $user = User::findOrFail($id);
         if ($user->activated === 1) {
             $user->activated = 1;

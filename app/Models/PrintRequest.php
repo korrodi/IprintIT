@@ -32,6 +32,7 @@ class PrintRequest extends Model
      */
     public function comments()
     {
+    
         return $this->hasMany('App\Comment');
     }
 
@@ -42,7 +43,22 @@ class PrintRequest extends Model
      *
      * @var array
      */
-    /*protected $fillable = [
-        'name', 'email', 'password', 'department_id', 'activated'
-    ];*/
+    protected $fillable = [
+        'owner_id', 'description', 'quantity', 'colored', 'stapled', 'paper_size', 'paper_type', 'file', 'due_date'
+    ];
+    public function resumeText($type, $limit)
+    {
+        $summary = $this->$type;
+
+        if (strlen($summary) > $limit) {
+          $summary = substr($summary, 0, strrpos(substr($summary, 0, $limit), ' ')) . '...';
+          return $summary;
+        }
+
+        return $summary;
+    }
+    public function getStatus() 
+    {
+        return ($this->status == 1)? 'Processado' : 'Processamento';
+    }
 }
