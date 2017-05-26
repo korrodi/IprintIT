@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Support\Facades\Validator;
 use Storage;
 use Auth;
+use File;
 
 class UserController extends Controller
 {   
@@ -54,8 +55,9 @@ class UserController extends Controller
         }
         if ($request->hasFile('profile_photo') && !$validator->fails()) {
             $image = $request->file('profile_photo');
-            $filename = $image->getClientOriginalName();
-            $image = $request->file('profile_photo')->store('profiles');
+            $storagePath = Storage::put('public/profiles', $image);
+            $filename = basename($storagePath);
+
             $user->profile_photo = $filename;
         }
         

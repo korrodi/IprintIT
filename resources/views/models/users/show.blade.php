@@ -31,7 +31,7 @@
             <div class="btn-group" role="group">
                 <a id="market" class="btn btn-default" href="{{-- route('profile.market' )--}}">
                     <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-                    <div class="hidden-xs">Mercado</div>
+                    <div class="hidden-xs">Adicionar Requesitos</div>
                 </a>
             </div>
             <div class="btn-group" role="group">
