@@ -5,6 +5,7 @@ $(document).ready(function() {
 });
 </script>
 
+
 <script type="text/javascript">
 $('.count').each(function () {
     $(this).prop('Counter',0).animate({
@@ -20,7 +21,8 @@ $('.count').each(function () {
 });
 </script>
 
-<!-- Anchor links
+<!-- Anchor links -->
+<!--
 <script type="text/javascript">
 $('a[href^=#]').on("click",function(){
     var t= $(this.hash);
@@ -32,4 +34,4 @@ $('a[href^=#]').on("click",function(){
     }
 });
 </script>
-*/
+-->

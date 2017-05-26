@@ -3,7 +3,6 @@
     <head>
         @include('includes.head')   
     </head>
-
     <body>
         <div class="page-wrap">
             <header class="page-row">
@@ -13,9 +12,7 @@
                 <!-- main content -->
                 <div id="content">
                     <div class="container">
-                        <div class="panel panel-default">
-                            @yield('content')
-                        </div>
+                        @yield('content')
                     </div>
                 </div>
             </div>

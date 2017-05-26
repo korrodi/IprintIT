@@ -63,6 +63,9 @@ i {
 .text-black {
     color: black;
 }
+.caroucel-height {
+    height: 330px;
+}
 .logo {
     max-width: 130px;
     margin-bottom: -40px;
