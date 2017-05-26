@@ -34,6 +34,8 @@ class PrintRequest extends Model
     {
         return $this->hasMany('App\Comment');
     }
+
+
     protected $table = 'requests';
     /**
      * The attributes that are mass assignable.

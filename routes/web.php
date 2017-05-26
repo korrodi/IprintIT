@@ -62,3 +62,5 @@ Route::get('user/edit/{user_id}', 'UserController@editUser')->name('users.edit')
 
 Route::patch('user/edit/{user_id}', 'UserController@updateRequest')->name('users.update');
 
+//Comments
+Route::post('comments/{request_id}', 'CommentsController@store');
