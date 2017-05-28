@@ -71,8 +71,13 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
             'department_id' => $data['department_id'],
         ]);
-        app('App\Http\Controllers\UserController')->sendRegistration($user->id);
-
+        
+        Mail::send('auth.emails.verification', ['user' => $user], function($message) use ($user)
+        {
+            $message->from('iprintit.ainet@gmail.com', "PrintIT::Team");
+            $message->subject("PrintIT - Confirme a sua conta");
+            $message->to($user->email);
+        });
         
         return $user;
     }

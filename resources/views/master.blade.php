@@ -9,6 +9,9 @@
                 @include('includes.header')
             </header>
             <div id="main" class="pagerow">
+                @if(Session::has('msg'))
+                    {{ Session::get('msg') }}
+                @endif
                 <!-- main content -->
                 <div id="content">
                     <div class="container">

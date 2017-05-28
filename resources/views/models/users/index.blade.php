@@ -3,14 +3,20 @@
 @section('content')
     <div class="panel panel-default">
         @if(count($users))
+            <div class="panel-heading center">
+
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Photo</th>
                         <th>Email</th>
-                        <th>Name</th>
+                        <th>
+                            <a href="{{ route('users.list', [isset($iconName)]) }}">
+                                Name <span class="glyphicon {{ isset($iconName)? 'glyphicon-triangle-bottom' : 'glyphicon-triangle-top' }}" aria-hidden="true"></span>
+                            </a>
+                        </th>
                         <th>Phone</th>
-                        <th>Department</th>
+                        <th>Department <span class="glyphicon {{ isset($iconName)? 'glyphicon-triangle-bottom' : 'glyphicon-triangle-top' }}" aria-hidden="true"></span></th>
                         <th>Presentation</th>
                         <th>Profile Url</th>
                         @if(!Auth::guest())
@@ -21,7 +27,7 @@
 
                 <tbody>
                     @foreach ($users as $user)
-                        <tr onclick="document.location = '{{ route('user.show',[$user->id]) }}';">
+                        <tr onclick="document.location = '{{ route('user.show',[$user]) }}';">
                             <td>
                                 @if(isset($user->profile_photo))
                                     <img src="/profiles/{{ $user->profile_photo }}"  width="55" height="55" alt="" class="img-circle"/>
@@ -31,10 +37,11 @@
                             </td>
                             <td><a href='mailto:{{ $user->email }}'>{{ $user->email }}</a></td>
                             <td>{{ $user->getName() }}</td>
-                            <td>{{ $user->phone? $user->phone : '...' }}</td>
-                            <td>{{ $user->department->name }}</td>
+                            {{-- string will auto escape when you perform {{ }} --}}
+                            <td>{!! $user->phone? '<a href="' . $user->phone . '">' .$user->phone . '</a>' : '...' !!}</td>
+                            <td><a href="{{ route('department.show',[$user->department->id]) }}">{{ $user->department->name }}</a></td>
                             <td>{{ $user->presentation? $user->resumeText(30) : '...' }}</td>
-                            <td>{{ $user->profile_url? $user->profile_url : '...' }}</td>
+                            <td>{!! $user->profile_url? '<a href="' . $user->profile_url . '">' . $user->profile_url . '</a>' : '...' !!}</td>
 
                             @if(!Auth::guest())
                                 @if(Auth::user()->id == $user->id ||  Auth::user()->admin)

@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Auth;
 use App\User;
+use Session;
 
 class CheckIfActive
 {
@@ -31,5 +32,6 @@ class CheckIfActive
     public function terminate($request, $response)
     {
         // Store the session data...
+        return session()->flash('msg','Hey, You have a message to read');
     }
 }
