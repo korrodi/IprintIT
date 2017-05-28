@@ -26,7 +26,7 @@ class CheckIfBlocked
         }
         return redirect('/');
     }
-    
+
     public function terminate($request, $response)
     {
         // Store the session data...

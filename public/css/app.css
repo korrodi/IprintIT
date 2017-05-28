@@ -24,9 +24,6 @@ a {
 i {
     padding-right: 10px;
 }
-input[type=file] {
-    display: none;
-}
 .Processado {
     background-color: green;
 }

@@ -16,46 +16,34 @@ class UserController extends Controller
         $this->middleware('auth', ['except' => ['listUsers','showUser']]);
         //$this->middleware('active', ['except' => ['showUser']]);
     }
-    public function listUsers($depId = null, $icon = null)
+    public function listUsers()
     {
-        if(!$icon) {
-            if(!$depId) {
-                $title = 'List Users';
-                $users = User::paginate(15); 
-            } else{
-                $title = 'List Users by Department';
-                $users = User::where('department_id', $depId)->paginate(15);
-            }
-        } else {
-            $iconName = 1;
-            if(!$depId) {
-                $title = 'List Users';
-                $users = User::orderBy('name')->paginate(15); 
-            } else{
-                $title = 'List Users by Department';
-                $users = User::where('department_id', $depId)->paginate(15);
-            }
-        }
-         
-        return view('models.users.index', compact('title', 'users', 'iconName'));
+        $title = 'List Users';
+
+        $users = User::paginate(15); 
+
+        return view('models.users.index', compact('title', 'users'));
 
     }
-    public function showUser(User $user)
+    public function showUser($id)
     {
+        $user = User::findOrFail($id);
         $title = 'Show User';
                 
         return view('models.users.show', compact('title', 'user'));
     }
 
-    public function editUser(User $user)
+    public function editUser(Request $request, $id)
     {
+        $user = User::findOrFail($id);
         $title = 'Edit user';
                 
         return view('models.users.edit', compact('title', 'user'));
     }
     
-    public function updateUser(Request $request, User $user)
+    public function updateUser(Request $request, $id)
     {
+        $user = User::findOrFail($id);
         $title = 'Edit user';
         
         $this->updateUserFromRequest($request, $user);
@@ -63,7 +51,7 @@ class UserController extends Controller
         $validator = validator($request->all());
 
         if ($validator->fails()) {
-            return redirect()->route('models.users.edit', [$user])->withErrors($validator)->withInput();
+            return redirect()->route('models.users.edit', [$id])->withErrors($validator)->withInput();
         }
         if ($request->hasFile('profile_photo') && !$validator->fails()) {
             $image = $request->file('profile_photo');
@@ -73,13 +61,13 @@ class UserController extends Controller
             $user->profile_photo = $filename;
         }
         
-        $message = ['msg' => 'User updated successfully'];
+        $message = ['message_success' => 'User updated successfully'];
         if (!$user->save()) {
-            $message = ['msg' => 'failed to updated user'];
+            $message = ['message_error' => 'failed to updated user'];
         }
 
-        dd($user);
-        return redirect()->route('user.show', [$user])->with($message);
+
+        return redirect()->route('user.show', [$id])->with($message);
     }
 
     protected function validator(array $data)
@@ -89,10 +77,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'department_id' => 'exists:departments,id',
-            'presentation' => 'max:150',
-            'profile_url' => 'url',
-            'profile_photo' => 'image'
+            'department_id' => 'required|exists:departments,id',
         ]);
     }
 
@@ -103,7 +88,18 @@ class UserController extends Controller
         return $user;
     }
 
-    /* Funcao de merda */
+    public function sendRegistration($id)
+    {
+        $user = User::findOrFail($id);
+
+        Mail::send('auth.emails.verification', ['user' => $user], function($message) use ($user)
+        {
+            $message->from('iprintit.ainet@gmail.com', "PrintIT::Team");
+            $message->subject("PrintIT - Confirme a sua conta");
+            $message->to($user->email);
+        });
+    }
+
     public function confirmRegistration($remember_token)
     {
         $users = User::all();

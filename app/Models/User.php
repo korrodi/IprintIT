@@ -4,12 +4,10 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Scout\Searchable;
 
 class User extends Authenticatable
 {
     use Notifiable;
-    use Searchable;
     /**
      * Get the requests for the User.
      */
@@ -49,7 +47,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
     public function isAdmin()
     {
         if ($this->admin === 1) {
@@ -66,7 +63,7 @@ class User extends Authenticatable
     }
     public function isBlocked()
     {
-        if ($this->blocked === 0) {
+        if ($this->blocked === 1) {
             return true;
         }
         return false;
