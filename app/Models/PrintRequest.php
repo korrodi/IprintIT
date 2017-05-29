@@ -40,7 +40,7 @@ class PrintRequest extends Model
      *
      * @var array
      */
-    /*protected $fillable = [
-        'name', 'email', 'password', 'department_id', 'activated'
-    ];*/
+    protected $fillable = [
+        'owner_id', 'description', 'quantity', 'colored', 'stapled', 'paper_size', 'paper_type', 'file', 'due_date'
+    ];
 }
