@@ -16,34 +16,46 @@ class UserController extends Controller
         $this->middleware('auth', ['except' => ['listUsers','showUser']]);
         //$this->middleware('active', ['except' => ['showUser']]);
     }
-    public function listUsers()
+    public function listUsers(Request $request, $depId = null, $icon = null)
     {
-        $title = 'List Users';
+        if(!$icon) {
+            if(!$depId) {
+                $title = 'List Users';
+                $users = User::paginate(15); 
+            } else{
+                $title = 'List Users by Department';
+                $users = User::where('department_id', $depId)->paginate(15);
+            }
+        } else {
+            $iconName = 1;
+            if(!$depId) {
+                $title = 'List Users';
+                $users = User::orderBy('name')->paginate(15); 
+            } else{
+                $title = 'List Users by Department';
+                $users = User::where('department_id', $depId)->paginate(15);
+            }
+        }
 
-        $users = User::paginate(15); 
-
-        return view('models.users.index', compact('title', 'users'));
+        return view('models.users.index', compact('title', 'users', 'iconName'));
 
     }
-    public function showUser($id)
+    public function showUser(User $user)
     {
-        $user = User::findOrFail($id);
         $title = 'Show User';
                 
         return view('models.users.show', compact('title', 'user'));
     }
 
-    public function editUser(Request $request, $id)
+    public function editUser(User $user)
     {
-        $user = User::findOrFail($id);
         $title = 'Edit user';
                 
         return view('models.users.edit', compact('title', 'user'));
     }
     
-    public function updateUser(Request $request, $id)
+    public function updateUser(Request $request, User $user)
     {
-        $user = User::findOrFail($id);
         $title = 'Edit user';
         
         $this->updateUserFromRequest($request, $user);
@@ -51,7 +63,7 @@ class UserController extends Controller
         $validator = validator($request->all());
 
         if ($validator->fails()) {
-            return redirect()->route('models.users.edit', [$id])->withErrors($validator)->withInput();
+            return redirect()->route('models.users.edit', [$user])->withErrors($validator)->withInput();
         }
         if ($request->hasFile('profile_photo') && !$validator->fails()) {
             $image = $request->file('profile_photo');
@@ -61,13 +73,13 @@ class UserController extends Controller
             $user->profile_photo = $filename;
         }
         
-        $message = ['message_success' => 'User updated successfully'];
+        $message = ['msg' => 'User updated successfully'];
         if (!$user->save()) {
-            $message = ['message_error' => 'failed to updated user'];
+            $message = ['msg' => 'failed to updated user'];
         }
 
-
-        return redirect()->route('user.show', [$id])->with($message);
+        dd($user);
+        return redirect()->route('user.show', [$user])->with($message);
     }
 
     protected function validator(array $data)
@@ -77,7 +89,10 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'department_id' => 'required|exists:departments,id',
+            'department_id' => 'exists:departments,id',
+            'presentation' => 'max:150',
+            'profile_url' => 'url',
+            'profile_photo' => 'image'
         ]);
     }
 
@@ -88,18 +103,7 @@ class UserController extends Controller
         return $user;
     }
 
-    public function sendRegistration($id)
-    {
-        $user = User::findOrFail($id);
-
-        Mail::send('auth.emails.verification', ['user' => $user], function($message) use ($user)
-        {
-            $message->from('iprintit.ainet@gmail.com', "PrintIT::Team");
-            $message->subject("PrintIT - Confirme a sua conta");
-            $message->to($user->email);
-        });
-    }
-
+    /* Funcao de merda */
     public function confirmRegistration($remember_token)
     {
         $users = User::all();

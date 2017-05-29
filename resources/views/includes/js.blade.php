@@ -21,6 +21,24 @@ $('.count').each(function () {
 });
 </script>
 
+<script type="text/javascript">
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#image').attr('src', e.target.result);
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+$("#profile_photo").change(function(){
+    readURL(this);
+});
+</script>
+
 <!-- Anchor links -->
 <!--
 <script type="text/javascript">

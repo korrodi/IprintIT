@@ -16,25 +16,22 @@
                     <li><a href="{{ route('login') }}">Login</a></li>
                     <li><a href="{{ route('register') }}">Register</a></li>
                 @else
-                    <li class="dropdown">
+                    <li>
                         <a href="{{-- route('users.show',[Auth::user()->id]) --}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 <img src="{{ isset(Auth::user()->profile_photo)? 'profiles/\{\{ Auth::user()->profile_photo \}\}' : 'http://placehold.it/40x40/000/fff' }}"  width="20" height="20" alt="" class="img-circle"/>
                             {{ Auth::user()->name }} <span class="caret"></span>
                         </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('logout') }}"
+                            onclick="event.preventDefault();
+                                     document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
 
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();">
-                                    Logout
-                                </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    {{ csrf_field() }}
-                                </form>
-                            </li>
-                        </ul>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
                     </li>
                 @endif
             </ul>

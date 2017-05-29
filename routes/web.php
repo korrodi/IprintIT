@@ -21,7 +21,7 @@ Route::get('/', 'LandingController@index')->name('landing.index');
 Route::get('users', 'UserController@listUsers')->name('users.list');
 Route::get('departments', 'DepartmentController@listDepartments')->name('departments.list');
 //US 1.2
-Route::get('users/show/{user_id}', 'UserController@showUser')->name('user.show');
+Route::get('users/show/{user}', 'UserController@showUser')->name('user.show');
 Route::get('department/show/{department_id}', 'DepartmentController@showDepartment')->name('department.show');;
 //US 1.4 / 3.3 (autenticado)
 //f§alta (route::post) para receber os toggle de filtragem da lista Requests
@@ -65,9 +65,9 @@ Route::patch('request/edit/{request_id}', 'PrintRequestController@updateRequest'
 Route::post('/request/delete/{request_id}', 'PrintRequestController@deleteRequest')->name('request.delete');;
 
 
-Route::get('user/edit/{user_id}', 'UserController@editUser')->name('users.edit');
+Route::get('user/edit/{user}', 'UserController@editUser')->name('users.edit');
 
-Route::patch('user/edit/{user_id}', 'UserController@updateUser')->name('users.update');
+Route::patch('user/edit/{user}', 'UserController@updateUser')->name('users.update');
 
 //Comments
 Route::post('comments/{request_id}', 'CommentsController@store');
