@@ -1,53 +1,59 @@
 @extends('master')
 
 @section('content')
-    <a id="users"></a>
-    <div class="panel-heading">{{ $title }}</div>
-    <div class="panel-body">
-        <div class="container">
-            <div class="well well-sm">
-                <strong>Category Title</strong>
-                <div class="btn-group">
-                    <a href="#" id="list" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-th-list">
-                    </span>List</a> <a href="#" id="grid" class="btn btn-default btn-sm"><span
-                        class="glyphicon glyphicon-th"></span>Grid</a>
-                </div>
-            </div>
-            @if(count($users))
-                @foreach ($users as $user)
-                    <div id="products" class="list-group">
-                        <div class="item  col-xs-4 col-lg-4" onclick="document.location = '{{route('users.show',[$user->id])}}'">
-                            <div class="thumbnail">
-                                <div class="pull-left">
-                                    @if(isset($user->profile_photo))
-                                        <img src="/profiles/{{ $user->profile_photo }}"  width="55" height="55" alt="" class="img-circle"/>
+    <div class="panel panel-default">
+        @if(count($users))
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Email</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Department</th>
+                        <th>Presentation</th>
+                        <th>Profile Url</th>
+                        @if(!Auth::guest())
+                            <th colspan="3">Actions</th>
+                        @endif
+                    </tr>
+                </thead>
 
-                                    @else
-                                        <img src="http://placehold.it/55x55/000/fff" width="55" height="55" alt="" class="img-circle"/>
-                                    @endif
-                                </div>
-                                <div class="caption">
-                                    <h4 class="group inner list-group-item-heading">{{ $user->name }}</h4>
-                                    @if(isset($user->presentation))
-                                        <p class="group inner list-group-item-text">{{ $user->presentation }}</p>
-                                    @endif
-                                    <div class="row">
-                                        <div class="col-xs-12 col-md-6">
-                                            <p class="summary">{{ $user->email }}</p>
-                                            <p class="summary">{{ $user->department->name }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            @else
-                <h2>No users found</h2>
-            @endif
-        </div>
-        <div class="panel-heading">
-            {{ $users->links() }}
-        </div>
+                <tbody>
+                    @foreach ($users as $user)
+                        <tr onclick="document.location = '{{ route('user.show',[$user->id]) }}';">
+                            <td>
+                                @if(isset($user->profile_photo))
+                                    <img src="/profiles/{{ $user->profile_photo }}"  width="55" height="55" alt="" class="img-circle"/>
+                                @else
+                                    <img src="http://placehold.it/55x55/000/fff" width="55" height="55" alt="" class="img-circle"/>
+                                @endif
+                            </td>
+                            <td><a href='mailto:{{ $user->email }}'>{{ $user->email }}</a></td>
+                            <td>{{ $user->getName() }}</td>
+                            <td>{{ $user->phone? $user->phone : '...' }}</td>
+                            <td>{{ $user->department->name }}</td>
+                            <td>{{ $user->presentation? $user->resumeText(30) : '...' }}</td>
+                            <td>{{ $user->profile_url? $user->profile_url : '...' }}</td>
+
+                            @if(!Auth::guest())
+                                @if(Auth::user()->id == $user->id ||  Auth::user()->admin)
+                                    <td>
+                                        <a class="btn btn-xs btn-info" href="{{ route('users.edit', [$user->id]) }}">Edit</a>
+                                    </td>
+                                @endif
+                            @endif
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            <div class="panel-heading center">
+                {{ $users->links() }}
+            </div>
+            
+        @else
+            <h2>No users found</h2>
+        @endif
     </div>
 @endsection

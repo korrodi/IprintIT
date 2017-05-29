@@ -32,8 +32,11 @@ class PrintRequest extends Model
      */
     public function comments()
     {
+    
         return $this->hasMany('App\Comment');
     }
+
+
     protected $table = 'requests';
     /**
      * The attributes that are mass assignable.
@@ -43,4 +46,23 @@ class PrintRequest extends Model
     protected $fillable = [
         'owner_id', 'description', 'quantity', 'colored', 'stapled', 'paper_size', 'paper_type', 'file', 'due_date'
     ];
+<<<<<<< HEAD
 }
+=======
+    public function resumeText($type, $limit)
+    {
+        $summary = $this->$type;
+
+        if (strlen($summary) > $limit) {
+          $summary = substr($summary, 0, strrpos(substr($summary, 0, $limit), ' ')) . '...';
+          return $summary;
+        }
+
+        return $summary;
+    }
+    public function getStatus() 
+    {
+        return ($this->status == 1)? 'Processado' : 'Processamento';
+    }
+}
+>>>>>>> 9002062a0a332eb86bfca59d130a08488aa6f21c

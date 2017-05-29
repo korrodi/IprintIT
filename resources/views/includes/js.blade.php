@@ -5,6 +5,7 @@ $(document).ready(function() {
 });
 </script>
 
+
 <script type="text/javascript">
 $('.count').each(function () {
     $(this).prop('Counter',0).animate({
@@ -21,6 +22,26 @@ $('.count').each(function () {
 </script>
 
 <script type="text/javascript">
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#image').attr('src', e.target.result);
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+$("#profile_photo").change(function(){
+    readURL(this);
+});
+</script>
+
+<!-- Anchor links -->
+<!--
+<script type="text/javascript">
 $('a[href^=#]').on("click",function(){
     var t= $(this.hash);
     var t=t.length&&t||$('[name='+this.hash.slice(1)+']');
@@ -31,3 +52,4 @@ $('a[href^=#]').on("click",function(){
     }
 });
 </script>
+-->

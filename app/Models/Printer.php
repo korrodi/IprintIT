@@ -13,4 +13,13 @@ class Printer extends Model
     {
         return $this->hasMany('App\PrintRequest');
     }
+    public function getName()
+    {
+        $pieces = explode(" ", $this->name);
+        if (count($pieces) > 1) {
+            return $pieces[0] . ' ' . $pieces[count($pieces)-1];
+        }else {
+            return $this->name;
+        }
+    }
 }

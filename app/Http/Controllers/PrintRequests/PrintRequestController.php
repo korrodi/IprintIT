@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\PrintRequest;
+use Illuminate\Support\Facades\Validator;
+use Storage;
+use Auth;
 
 class PrintRequestController extends Controller
 {
+<<<<<<< HEAD
     //
 }
 
@@ -22,6 +27,39 @@ public function create()
 public function storeRequest(Request $request)
     {
         
+=======
+    
+    public function listRequests()
+    {
+        $title = 'List Requests';
+
+        $requests = PrintRequest::paginate(15); 
+        //dd($requests);
+        return view('models.requests.index', compact('title', 'requests'));
+
+    }
+    public function showRequest($id)
+    {
+        $today = Carbon::today();
+        $today = $today->format('Y-d-m');
+        
+
+        return view('models.requests.show', compact('today'));
+    }
+
+    public function createRequest()
+    {
+        $today = Carbon::today();
+        $today = $today->format('Y-d-m');
+        
+
+        return view('models.requests.add', compact('today'));
+    }
+
+    public function storeRequest(Request $request)
+    {
+            
+>>>>>>> 9002062a0a332eb86bfca59d130a08488aa6f21c
         $req = new Request;
         $req->owner_id = Auth::user()->id;
         $req->description = $request->input('description');
@@ -57,4 +95,9 @@ public function storeRequest(Request $request)
 
         $request->session()->flash('status', 'Advertisement added With Sucess');
         return redirect('/dashboard');
+<<<<<<< HEAD
     }
+=======
+    }
+}
+>>>>>>> 9002062a0a332eb86bfca59d130a08488aa6f21c

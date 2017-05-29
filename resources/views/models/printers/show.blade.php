@@ -32,7 +32,7 @@
                 <div class="btn-group" role="group">
                     <a id="market" class="btn btn-default" href="{{-- route('profile.market' )--}}">
                         <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-                        <div class="hidden-xs">Adicionar Requesitos</div>
+                        <div class="hidden-xs">Mercado</div>
                     </a>
                 </div>
                 <div class="btn-group" role="group">
@@ -76,6 +76,6 @@
                    {{-- @yield('profile') --}}
                 </div>
             </div>
-        </div> 
-    </div>       
+        </div>   
+    </div>     
 @endsection

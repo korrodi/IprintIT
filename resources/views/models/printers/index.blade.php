@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="panel panel-default">
-        @if(count($departments))
+        @if(count($printers))
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -15,15 +15,15 @@
                 </thead>
 
                 <tbody>
-                    @foreach ($departments as $department)
-                        <tr onclick="document.location = '{{ route('department.show',[$department->id]) }}';">
-                            <td>{{ $department->name }}</td>
+                    @foreach ($printers as $printer)
+                        <tr onclick="document.location = '{{ route('printer.show',[$printer->id]) }}';">
+                            <td>{{ $printer->name }}</td>
                             <td>{{-- $totalOfPrints --}}</td>
                             
                             {{--@if(!Auth::guest())
                                 @if(Auth::user()->admin)
                                     <td>
-                                        <a class="btn btn-xs btn-info" href="{{ route('departments.edit', [$department->id]) }}">Edit</a>
+                                        <a class="btn btn-xs btn-info" href="{{ route('printers.edit', [$printer->id]) }}">Edit</a>
                                     </td>
                                 @endif
                             @endif--}}
@@ -33,11 +33,11 @@
         </table>
         
         <div class="panel-heading center">
-           {{ $departments->links() }}  
+           {{ $printers->links() }}  
         </div>
         
         @else
-            <h2>No departments found</h2>
+            <h2>No printers found</h2>
         @endif
     </div>
 @endsection

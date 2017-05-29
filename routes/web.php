@@ -18,21 +18,28 @@ Auth::routes();
 */
 //US 1.1 / 1.3
 Route::get('/', 'LandingController@index')->name('landing.index');
+Route::get('users', 'UserController@listUsers')->name('users.list');
+Route::get('departments', 'DepartmentController@listDepartments')->name('departments.list');
 //US 1.2
-Route::get('/department/show/{department_id}', 'ProfileController@index');
+Route::get('users/show/{user}', 'UserController@showUser')->name('user.show');
+Route::get('department/show/{department_id}', 'DepartmentController@showDepartment')->name('department.show');;
 //US 1.4 / 3.3 (autenticado)
-Route::get('/user/show/{user_id}', 'UserController@showUser')->name('users.show');
-//falta (route::post) para receber os toggle de filtragem da lista Requests
+//f§alta (route::post) para receber os toggle de filtragem da lista Requests
 /*
         Admin
 */
 //US 2.1 / 2.5.1 / 2.7
-Route::get('manage/', 'ProfileController@index');
+Route::get('manage/', 'HomeController@index');
+Route::get('manage/requests', 'PrintRequestController@listRequests')->name('requests.list');
+Route::patch('manage/request/show/{request_id}', 'PrintRequestController@showRequest')->name('request.show');
+Route::get('manage/printers', 'PrinterController@listPrinters')->name('printers.list');
+Route::patch('manage/printers/show/{printer_id}', 'PrinterController@showPrinter')->name('printer.show');
+
 //falta (route::post) para receber os toggle de filtragem da lista Requests/ Users/ Comentarios
 //US 2.2
-Route::patch('manage/request/show/{request_id}/toggleAccomplishedRequest', 'RequestController@toggleRequest');
+Route::patch('manage/request/show/{request_id}/toggleAccomplishedRequest', 'PrintRequestController@toggleRequest');
 //US 2.3
-Route::patch('manage/{request_id}/refuseRequest', 'RequestController@refuseRequest');
+Route::patch('manage/{request_id}/refuseRequest', 'PrintRequestController@refuseRequest');
 //US 2.4
 Route::patch('manage/request/show/{comment_id}/refuseComment', 'CommentController@refuseComment');
 //US 2.5.2
@@ -47,18 +54,20 @@ Route::patch('manage/{user_id}/toggleAdmin', 'UsersController@toggleUserAdmin');
 //US 1.6.2     
 Route::get('/register/verify/{user_id}', 'UserController@confirmRegistration');
 //US 3.2.1     
-Route::get('request/create', 'RequestController@createRequest');
+Route::get('request/create', 'PrintRequestController@createRequest');
 //US 3.2.2
-Route::post('request/create', 'RequestController@addRequest');
+Route::post('request/create', 'PrintRequestController@addRequest');
 //US 3.4.1
-Route::get('request/edit/{request_id}', 'RequestController@editRequest');
+Route::get('request/edit/{request_id}', 'PrintRequestController@editRequest');
 //US 3.     
-Route::patch('request/edit/{request_id}', 'RequestController@updateRequest');
+Route::patch('request/edit/{request_id}', 'PrintRequestController@updateRequest');
 //US 3.     
-Route::post('/request/delete/{request_id}', 'RequestController@deleteRequest');
+Route::post('/request/delete/{request_id}', 'PrintRequestController@deleteRequest')->name('request.delete');;
 
 
-Route::get('user/edit/{user_id}', 'UserController@editUser')->name('users.edit');
+Route::get('user/edit/{user}', 'UserController@editUser')->name('users.edit');
 
-Route::patch('user/edit/{user_id}', 'UserController@updateRequest')->name('users.update');
+Route::patch('user/edit/{user}', 'UserController@updateUser')->name('users.update');
 
+//Comments
+Route::post('comments/{request_id}', 'CommentsController@store');

@@ -68,4 +68,24 @@ class User extends Authenticatable
         }
         return false;
     }
+    public function resumeText($limit)
+    {
+        $summary = $this->presentation;
+
+        if (strlen($summary) > $limit) {
+          $summary = substr($summary, 0, strrpos(substr($summary, 0, $limit), ' ')) . '...';
+          return $summary;
+        }
+
+        return $summary;
+    }
+    public function getName()
+    {
+        $pieces = explode(" ", $this->name);
+        if (count($pieces) > 1) {
+            return $pieces[0] . ' ' . $pieces[count($pieces)-1];
+        }else {
+            return $this->name;
+        }
+    }
 }

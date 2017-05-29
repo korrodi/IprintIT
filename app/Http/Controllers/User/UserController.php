@@ -7,34 +7,55 @@ use App\User;
 use Illuminate\Support\Facades\Validator;
 use Storage;
 use Auth;
+use File;
 
 class UserController extends Controller
 {   
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['showUser']]);
-        $this->middleware('active', ['except' => ['showUser']]);
+        $this->middleware('auth', ['except' => ['listUsers','showUser']]);
+        //$this->middleware('active', ['except' => ['showUser']]);
     }
-    
-    public function showUser($id)
+    public function listUsers(Request $request, $depId = null, $icon = null)
     {
-        $user = User::findOrFail($id);
+        if(!$icon) {
+            if(!$depId) {
+                $title = 'List Users';
+                $users = User::paginate(15); 
+            } else{
+                $title = 'List Users by Department';
+                $users = User::where('department_id', $depId)->paginate(15);
+            }
+        } else {
+            $iconName = 1;
+            if(!$depId) {
+                $title = 'List Users';
+                $users = User::orderBy('name')->paginate(15); 
+            } else{
+                $title = 'List Users by Department';
+                $users = User::where('department_id', $depId)->paginate(15);
+            }
+        }
+
+        return view('models.users.index', compact('title', 'users', 'iconName'));
+
+    }
+    public function showUser(User $user)
+    {
         $title = 'Show User';
                 
         return view('models.users.show', compact('title', 'user'));
     }
 
-    public function editUser(Request $request, $id)
+    public function editUser(User $user)
     {
-        $user = User::findOrFail($id);
         $title = 'Edit user';
                 
-        return view('users.edit', compact('title', 'user'));
+        return view('models.users.edit', compact('title', 'user'));
     }
     
-    public function updateUser(Request $request, $id)
+    public function updateUser(Request $request, User $user)
     {
-        $user = User::findOrFail($id);
         $title = 'Edit user';
         
         $this->updateUserFromRequest($request, $user);
@@ -42,26 +63,23 @@ class UserController extends Controller
         $validator = validator($request->all());
 
         if ($validator->fails()) {
-            return redirect()->route('users.edit', [$id])->withErrors($validator)->withInput();
+            return redirect()->route('models.users.edit', [$user])->withErrors($validator)->withInput();
         }
         if ($request->hasFile('profile_photo') && !$validator->fails()) {
             $image = $request->file('profile_photo');
+            $storagePath = Storage::put('public/profiles', $image);
+            $filename = basename($storagePath);
 
-            $filename  = Auth::user()->id . '-profile_photo.' . $image->getClientOriginalExtension();
-            File::makeDirectory(storage_path('uploads/img' . Auth::user()->id), $mode = 0777, true, true);
-
-            $path = public_path('uploads/img' . Auth::user()->id . '/' . $filename);
-            Image::make($image->getRealPath())->resize(150, 150)->save($path);
             $user->profile_photo = $filename;
         }
         
-        $message = ['message_success' => 'User updated successfully'];
+        $message = ['msg' => 'User updated successfully'];
         if (!$user->save()) {
-            $message = ['message_error' => 'failed to updated user'];
+            $message = ['msg' => 'failed to updated user'];
         }
 
-
-        return redirect()->route('profile.products')->with($message);
+        dd($user);
+        return redirect()->route('user.show', [$user])->with($message);
     }
 
     protected function validator(array $data)
@@ -71,7 +89,10 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'department_id' => 'required|exists:departments,id',
+            'department_id' => 'exists:departments,id',
+            'presentation' => 'max:150',
+            'profile_url' => 'url',
+            'profile_photo' => 'image'
         ]);
     }
 
@@ -82,20 +103,14 @@ class UserController extends Controller
         return $user;
     }
 
-    public function sendRegistration($id)
+    /* Funcao de merda */
+    public function confirmRegistration($remember_token)
     {
-        $user = User::findOrFail($id);
-
-        Mail::send('auth.emails.verification', ['user' => $user], function($message) use ($user)
-        {
-            $message->from('iprintit.ainet@gmail.com', "PrintIT::Team");
-            $message->subject("PrintIT - Confirme a sua conta");
-            $message->to($user->email);
-        });
-    }
-
-    public function confirmRegistration($id)
-    {
+        $users = User::all();
+        
+        foreach ($users as $user) {
+               if($user->remember_token == $remember_token);
+        }   
         $user = User::findOrFail($id);
         if ($user->activated === 1) {
             $user->activated = 1;
