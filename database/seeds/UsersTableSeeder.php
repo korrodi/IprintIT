@@ -5,7 +5,7 @@ use Illuminate\Database\Seeder;
 class UsersTableSeeder extends Seeder
 {
     private $photoPath = 'public/profiles';
-    private $numberOfActivedUsers = 20;
+    private $numberOfActivatedUsers = 20;
     private $numberOfActivatedAdmins = 5;
     private $numberOfBlockedUsers = 5;
     private $numberOfNonActivatedUsers = 5;
@@ -34,20 +34,12 @@ class UsersTableSeeder extends Seeder
 
         $departments = DB::table('departments')->pluck('id')->toArray();
 
-        $this->command->info('Creating '.$this->numberOfActivedUsers.' active users...');
-        $bar = $this->command->getOutput()->createProgressBar($this->numberOfActivedUsers);
-        for ($i = 0; $i < $this->numberOfActivedUsers; ++$i) {
-            $user = $this->fakeUser($faker, $faker->randomElement($departments));
-            if ($i == 0) {
-                $user['email'] = 'user@mail.pt';
-                $user['password']  = bcrypt('user123');
-
-                $this->command->info('Created Auth User with Email: ' . $user['email']);
-            }
-            DB::table('users')->insert($user);
+        $this->command->info('Creating '.$this->numberOfActivatedUsers.' active users...');
+        $bar = $this->command->getOutput()->createProgressBar($this->numberOfActivatedUsers);
+        for ($i = 0; $i < $this->numberOfActivatedUsers; ++$i) {
+            DB::table('users')->insert($this->fakeUser($faker, $faker->randomElement($departments)));
             $bar->advance();
         }
-
         $bar->finish();
         $this->command->info('');
 
@@ -56,11 +48,6 @@ class UsersTableSeeder extends Seeder
         for ($i = 0; $i < $this->numberOfActivatedAdmins; ++$i) {
             $user = $this->fakeUser($faker, $faker->randomElement($departments));
             $user['admin'] = true;
-            if ($i == 0) {
-                $user['email'] = 'admin@mail.pt';
-                $user['password'] = bcrypt('admin123');
-                $this->command->info('Created Admin User with Email: ' . $user['email']);
-            }
             DB::table('users')->insert($user);
             $bar->advance();
         }
@@ -88,6 +75,20 @@ class UsersTableSeeder extends Seeder
         }
         $bar->finish();
         $this->command->info('');
+
+        // Creates the requested users from Rules
+        $user = $this->fakeUser($faker, $faker->randomElement($departments));
+        $user['name'] = 'User';
+        $user['email'] = 'user@mail.pt';
+        $user['password'] = bcrypt('user123');
+        DB::table('users')->insert($user);
+
+        $user = $this->fakeUser($faker, $faker->randomElement($departments));
+        $user['name'] = 'Administrator';
+        $user['email'] = 'admin@mail.pt';
+        $user['password'] = bcrypt('admin123');
+        $user['admin'] = true;
+        DB::table('users')->insert($user);
     }
 
     private function fakeUser(Faker\Generator $faker, $departmentId)
