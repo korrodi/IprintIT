@@ -119,6 +119,11 @@ class RefactorsDb extends Migration
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
         });
+
+        Shema::table('comments', function($table)){
+            $table->foreign('post_id'->references('id')->on('requests')->onDelete('cascade')); 
+            //ao eliminar um request, os comentarios devem tambem ser eliminados
+        }
     }
 
     /**

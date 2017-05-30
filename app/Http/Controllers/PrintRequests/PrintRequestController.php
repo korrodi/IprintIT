@@ -10,25 +10,21 @@ use Auth;
 
 class PrintRequestController extends Controller
 {
-<<<<<<< HEAD
-    //
-}
 
 
-public function create()
-{
-    $today = Carbon::today();
-    $today = $today->format('Y-d-m');
+
+    public function create()
+    {    
+        $today = Carbon::today();
+        $today = $today->format('Y-d-m');
     
 
-    return view('models.requests.add', compact('today'));
-}
+        return view('models.requests.add', compact('today'));   
+    }   
 
 public function storeRequest(Request $request)
     {
-        
-=======
-    
+
     public function listRequests()
     {
         $title = 'List Requests';
@@ -59,7 +55,7 @@ public function storeRequest(Request $request)
     public function storeRequest(Request $request)
     {
             
->>>>>>> 9002062a0a332eb86bfca59d130a08488aa6f21c
+
         $req = new Request;
         $req->owner_id = Auth::user()->id;
         $req->description = $request->input('description');
@@ -95,9 +91,12 @@ public function storeRequest(Request $request)
 
         $request->session()->flash('status', 'Advertisement added With Sucess');
         return redirect('/dashboard');
-<<<<<<< HEAD
+
+
     }
-=======
+
+    public function comments(){
+        return $this = hasMany();
     }
 }
->>>>>>> 9002062a0a332eb86bfca59d130a08488aa6f21c
+

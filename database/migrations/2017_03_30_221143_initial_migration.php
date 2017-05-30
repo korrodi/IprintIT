@@ -53,6 +53,12 @@ class InitialMigration extends Migration
             $table->integer('user_id')->unsigned();
             $table->timestamps();
         });
+
+        Shema::table('comments', function($table)){
+            $table->foreign('request_id'->references('id')->on('requests')->onDelete('cascade')); 
+            //ao eliminar um request, os comentarios devem tambem ser eliminados
+        });
+    }
         Schema::create('requests', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('owner_id')->unsigned();
@@ -73,11 +79,6 @@ class InitialMigration extends Migration
             $table->smallInteger('satisfaction_grade')->nullable();
             $table->timestamps();
         });
-//Apagar os comentarios associados ao comentario pai
-        //Nao testado
-        Schema::table('comments',function ($table){
-            $table->foreign('request_id')->references('id')->on('parent_id')->onDelete('cascade');
-        });
     }
 
     /**
@@ -87,13 +88,13 @@ class InitialMigration extends Migration
      */
     public function down()
     {
-        Schema::dropForeign(['request_id']);
         Schema::dropIfExists('requests');
+        Shema::dropForeign(['request_id']);
         Schema::dropIfExists('comments');
         Schema::dropIfExists('departaments');
         Schema::dropIfExists('printers');
         Schema::dropIfExists('password_resets');
         Schema::dropIfExists('users');
-
+       
     }
 }
